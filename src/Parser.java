@@ -21,13 +21,23 @@ public class Parser {
     }
 
     /**
-     * 数学式子里的操作数
+     * 数学式子里的操作数，操作因子
      * factor : INTEGER
      */
     private int factor() {
         Token token = currentToken;
-        eat(TokenType.INTEGER);
-        return token.getValue();
+        switch (token.getType()) {
+            case INTEGER:
+                eat(TokenType.INTEGER);
+                return token.getValue();
+            case LPAREN:
+                eat(TokenType.LPAREN);
+                int result = expr();
+                eat(TokenType.RPAREN);
+                return result;
+            default:
+                throw new AssertionError("不应该发生");
+        }
     }
 
     /**

@@ -16,6 +16,13 @@ public class Lexer {
         this.input = input;
     }
 
+    public static void main(String[] args) {
+        Lexer lexer = new Lexer("1 * 3  / 2");
+        System.out.println(lexer.getNextInteger());
+        System.out.println(lexer.getNextInteger());
+        System.out.println(lexer.getNextInteger());
+    }
+
     /**
      * 通过语法分析，提取出下一个Token
      * 可以跳过空白字符
@@ -35,23 +42,12 @@ public class Lexer {
                 else if ('*' == c) { return new Token(TokenType.TIMES, '*'); }
                 else if ('/' == c) { return new Token(TokenType.DIVIDE, '/'); }
                 else if ('^' == c) { return new Token(TokenType.POWER, '^'); }
+                else if ('(' == c) { return new Token(TokenType.LPAREN, '('); }
+                else if (')' == c) { return new Token(TokenType.RPAREN, ')'); }
                 else { throw new UnsupportedOperationException("不支持的操作符"); }
             }
         }
         return new Token(TokenType.EOF, '\0');
-    }
-
-    /**
-     * 返回字符串中下一个整数
-     *
-     * @return 解析出来的整数
-     */
-    private int getNextInteger() {
-        StringBuilder pending = new StringBuilder(); // 已经遇到的数字字符
-        while (position < input.length() && Character.isDigit(input.charAt(position))) {
-            pending.append(input.charAt(position++));
-        }
-        return Integer.parseInt(pending.toString());
     }
 
     /**
@@ -72,10 +68,16 @@ public class Lexer {
     //     return ++position < input.length();
     // }
 
-    public static void main(String[] args) {
-        Lexer lexer = new Lexer("1 * 3  / 2");
-        System.out.println(lexer.getNextInteger());
-        System.out.println(lexer.getNextInteger());
-        System.out.println(lexer.getNextInteger());
+    /**
+     * 返回字符串中下一个整数
+     *
+     * @return 解析出来的整数
+     */
+    private int getNextInteger() {
+        StringBuilder pending = new StringBuilder(); // 已经遇到的数字字符
+        while (position < input.length() && Character.isDigit(input.charAt(position))) {
+            pending.append(input.charAt(position++));
+        }
+        return Integer.parseInt(pending.toString());
     }
 }
