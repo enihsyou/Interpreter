@@ -34,6 +34,7 @@ public class Lexer {
                 else if ('-' == c) { return new Token(TokenType.MINUS, '-'); }
                 else if ('*' == c) { return new Token(TokenType.TIMES, '*'); }
                 else if ('/' == c) { return new Token(TokenType.DIVIDE, '/'); }
+                else if ('^' == c) { return new Token(TokenType.POWER, '^'); }
                 else { throw new UnsupportedOperationException("不支持的操作符"); }
             }
         }
