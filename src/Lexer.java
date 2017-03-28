@@ -12,15 +12,8 @@ public class Lexer {
      */
     private int position = 0;
 
-    public Lexer(final String input) {
+    Lexer(final String input) {
         this.input = input;
-    }
-
-    public static void main(String[] args) {
-        Lexer lexer = new Lexer("1 * 3  / 2");
-        System.out.println(lexer.getNextInteger());
-        System.out.println(lexer.getNextInteger());
-        System.out.println(lexer.getNextInteger());
     }
 
     /**
@@ -30,7 +23,7 @@ public class Lexer {
      *
      * @return 字符串中下一个Token
      */
-    public Token getNextToken() {
+    Token getNextToken() {
         while (position < input.length()) {
             final char c = input.charAt(position);
             if (Character.isWhitespace(c)) { skipWhiteSpace(); } // 跳过当前空白字符

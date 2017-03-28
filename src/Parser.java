@@ -7,7 +7,7 @@ public class Parser {
 
     public Parser(final Lexer lexer) {
         mLexer = lexer;
-        currentToken = lexer.getNextToken();
+        currentToken = lexer.getNextToken(); // 初始化，指向第一个Token
     }
 
     /**
@@ -24,15 +24,15 @@ public class Parser {
      * 数学式子里的操作数，操作因子
      * factor : INTEGER
      */
-    private int factor() {
+    private Token factor() {
         Token token = currentToken;
         switch (token.getType()) {
             case INTEGER:
                 eat(TokenType.INTEGER);
-                return token.getValue();
+                return token;
             case LPAREN:
                 eat(TokenType.LPAREN);
-                int result = expr();
+                Token result = expr();
                 eat(TokenType.RPAREN);
                 return result;
             default:
@@ -47,23 +47,22 @@ public class Parser {
      *
      * @return 计算结果
      */
-    private int term() {
-        int result = factor();
+    private Token term() {
+        Token result = factor();
         while (TokenType.SECOND.contains(currentToken.getType())) {
-            switch (currentToken.getType()) {
+            final Token token = this.currentToken;
+            switch (token.getType()) {
                 case TIMES:
                     eat(TokenType.TIMES);
-                    result *= factor();
                     break;
                 case DIVIDE:
                     eat(TokenType.DIVIDE);
-                    result /= factor();
                     break;
                 // case POWER:
                 //     eat(TokenType.POWER);
-                //     result ^= factor();
                 //     break;
             }
+            result = new BinaryOperator(result, token, factor());
         }
         return result;
     }
@@ -75,20 +74,22 @@ public class Parser {
      *
      * @return 计算结果
      */
-    public int expr() {
-        int result = term();
+    private Token expr() {
+        Token result = term();
         while (TokenType.FIRST.contains(currentToken.getType())) {
-            switch (currentToken.getType()) {
+            final Token token = currentToken;
+            switch (token.getType()) {
                 case PLUS:
                     eat(TokenType.PLUS);
-                    result += term();
                     break;
                 case MINUS:
                     eat(TokenType.MINUS);
-                    result -= term();
                     break;
             }
+            result = new BinaryOperator(result, token, term());
         }
         return result;
     }
+
+    Token parse() {return expr();}
 }
