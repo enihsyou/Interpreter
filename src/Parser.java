@@ -64,9 +64,9 @@ public class Parser {
                 case DIVIDE:
                     eat(TokenType.DIVIDE);
                     break;
-                // case POWER:
-                //     eat(TokenType.POWER);
-                //     break;
+                case POWER:
+                    eat(TokenType.POWER);
+                    break;
             }
             result = new BinaryOperator(result, token, factor());
         }

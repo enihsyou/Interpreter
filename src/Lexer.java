@@ -52,15 +52,6 @@ public class Lexer {
         // return position < input.length(); //如果遇到结尾则返回失败
     }
 
-    // /**
-    //  * 当前位置指针前进一个字符
-    //  *
-    //  * @return 是否成功前进一个字符，如果遇到结尾则返回False
-    //  */
-    // private boolean advance() {
-    //     return ++position < input.length();
-    // }
-
     /**
      * 返回字符串中下一个整数
      *
@@ -72,5 +63,20 @@ public class Lexer {
             pending.append(input.charAt(position++));
         }
         return Integer.parseInt(pending.toString());
+    }
+
+    // /**
+    //  * 当前位置指针前进一个字符
+    //  *
+    //  * @return 是否成功前进一个字符，如果遇到结尾则返回False
+    //  */
+    // private boolean advance() {
+    //     return ++position < input.length();
+    // }
+
+    private char peek() {
+        int peekPosition = position + 1;
+        if (peekPosition < input.length()) { return input.charAt(peekPosition); }
+        return '\0';
     }
 }

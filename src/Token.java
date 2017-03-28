@@ -20,7 +20,7 @@ public class Token {
         return type;
     }
 
-    public Token nagete() {return new Token(type, -value);}
+    public Token negate() {return new Token(type, -value);}
 
     @Override
     public String toString() {
