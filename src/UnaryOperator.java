@@ -1,8 +1,12 @@
 public class UnaryOperator extends Token {
-    private final Token token;
+    private final Token body;
 
-    public UnaryOperator(final Token token) {
-        super(token);
-        this.token = token;
+    public UnaryOperator(final Token operator, final Token token) {
+        super(operator);
+        this.body = token;
+    }
+
+    public Token getBody() {
+        return body;
     }
 }

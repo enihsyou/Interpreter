@@ -31,7 +31,14 @@ public class Interpreter extends NodeVisitor {
 
     @Override
     public Token visitUnary(final UnaryOperator node) {
-        return node;
+        switch (node.getType()) {
+            case PLUS:
+                return visit(node.getBody());
+            case MINUS:
+                return visit(node.getBody()).nagete();
+            default:
+                throw new AssertionError("node = [" + node + "]" + "不应该发生");
+        }
     }
 
     @Override
@@ -53,7 +60,7 @@ public class Interpreter extends NodeVisitor {
                 return new Token(TokenType.INTEGER,
                     visit(node.getLeft()).getValue() ^ visit(node.getRight()).getValue());
             default:
-                throw new AssertionError("不应该发生");
+                throw new AssertionError("node = [" + node + "]" + "不应该发生");
         }
     }
 }

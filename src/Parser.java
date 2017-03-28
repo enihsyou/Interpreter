@@ -17,12 +17,12 @@ public class Parser {
      */
     private void eat(final TokenType type) {
         if (currentToken.getType() == type) { currentToken = mLexer.getNextToken(); }
-        else { throw new AssertionError(type + "类型不符合要求"); }
+        else { throw new AssertionError(type + "类型不符合对应" + type + "的要求"); }
     }
 
     /**
      * 数学式子里的操作数，操作因子
-     * factor : INTEGER
+     * factor : (PLUS | MINUS) factor | INTEGER | LPAREN expr RPAREN
      */
     private Token factor() {
         Token token = currentToken;
@@ -30,20 +30,26 @@ public class Parser {
             case INTEGER:
                 eat(TokenType.INTEGER);
                 return token;
+            case PLUS:
+                eat(TokenType.PLUS);
+                return new UnaryOperator(token, factor());
+            case MINUS:
+                eat(TokenType.MINUS);
+                return new UnaryOperator(token, factor());
             case LPAREN:
                 eat(TokenType.LPAREN);
                 Token result = expr();
                 eat(TokenType.RPAREN);
                 return result;
             default:
-                throw new AssertionError("不应该发生");
+                throw new AssertionError(token + "不能识别");
         }
     }
 
     /**
      * 算术表达式
-     * term : factor ((TIMES | DIVIDE) factor)*
-     * factor : INTEGER
+     * term   : factor ((TIMES | DIVIDE) factor)*
+     * factor : (PLUS | MINUS) factor | INTEGER | LPAREN expr RPAREN
      *
      * @return 计算结果
      */
@@ -68,9 +74,9 @@ public class Parser {
     }
 
     /**
-     * expr : term ((PLUS | MINUS) term)*
-     * term : factor ((TIMES | DIVIDE) factor)*
-     * factor : INTEGER
+     * expr   : term ((PLUS | MINUS) term)*
+     * term   : factor ((TIMES | DIVIDE) factor)*
+     * factor : (PLUS | MINUS) factor | INTEGER | LPAREN expr RPAREN
      *
      * @return 计算结果
      */
