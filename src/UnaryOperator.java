@@ -9,4 +9,9 @@ public class UnaryOperator extends BaseOperator {
     public Token<?> getBody() {
         return body;
     }
+
+    @Override
+    public String toString() {
+        return "{" + getType() + " " + body + "}";
+    }
 }

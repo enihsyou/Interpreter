@@ -1,5 +1,5 @@
 public class Variable extends Token<String> {
-    public Variable(final TokenType type, final String variableName) {
-        super(type, variableName);
+    public Variable(final String variableName) {
+        super(TokenType.VARIABLE, variableName);
     }
 }

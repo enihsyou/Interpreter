@@ -15,4 +15,9 @@ public class BinaryOperator extends BaseOperator {
     Token<?> getRight() {
         return right;
     }
+
+    @Override
+    public String toString() {
+        return left + " " + getType() + " " + right;
+    }
 }

@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * 解析由Lexer语法分析器传递过来的Token流
  * program : compound_statement DOT
@@ -22,11 +24,17 @@
  */
 class Parser {
     private final Lexer lexer;
-    private Token currentToken;
+    private Token<?> currentToken;
 
     Parser(final Lexer lexer) {
         this.lexer = lexer;
         currentToken = lexer.getNextToken(); // 初始化，指向第一个Token
+    }
+
+    public static void main(String[] args) {
+        Parser parser = new Parser(
+            new Lexer("BEGIN  BEGIN  number = 2; a = number; b = 10 * a + 10 * number / 4;  c = a--b END;x = 11;END."));
+        System.out.println(parser.parse());
     }
 
     /**
@@ -39,20 +47,60 @@ class Parser {
         else { throw new AssertionError(type + "类型不符合对应" + type + "的要求"); }
     }
 
-    private Token program() {return null;}
+    private Token<String> program() {
+        final CompoundStatement node = compoundStatement();
+        eat(TokenType.DOT);
+        return node;
+    }
 
-    private Token compundStatement() {return null;}
+    private CompoundStatement compoundStatement() {
+        eat(TokenType.BEGIN);
+        final StatementList nodes = statementList();
+        eat(TokenType.END);
 
-    private Token statementStatement() {return null;}
+        return new CompoundStatement(nodes);
+    }
 
-    private Token statement() {return null;}
+    private StatementList statementList() {
+        final BaseStatement node = statement();
+        final ArrayList<BaseStatement> children = new ArrayList<>();
+        children.add(node);
 
-    private Token assignmentStatement() {return null;}
+        while (currentToken.getType() == TokenType.SEMICOLON) {
+            eat(TokenType.SEMICOLON);
+            children.add(statement());
+        }
+        if (currentToken.getType() == TokenType.VARIABLE) {
+            throw new AssertionError("node = [" + currentToken + "]" + "不应该发生");
+        }
+        return new StatementList(children);
+    }
 
-    private Token variable() {return null;}
+    private BaseStatement statement() {
+        switch (currentToken.getType()) {
+            case BEGIN:
+                return compoundStatement();
+            case VARIABLE:
+                return assignmentStatement();
+            default:
+                return empty();
+        }
+    }
 
-    private Token empty() {return null;}
+    private AssignmentStatement assignmentStatement() {
+        final Variable variable = variable();
+        eat(TokenType.ASSIGN);
+        final Token right = expr();
+        return new AssignmentStatement(variable, right);
+    }
 
+    private Variable variable() {
+        Variable node = new Variable((String) currentToken.getValue());
+        eat(TokenType.VARIABLE);
+        return node;
+    }
+
+    private EmptyStatement empty() {return new EmptyStatement();}
 
     /**
      * 数学式子里的操作数，操作因子
@@ -76,7 +124,7 @@ class Parser {
                 eat(TokenType.RPAREN);
                 return result;
             default:
-                throw new AssertionError(token + "不能识别");
+                return variable();
         }
     }
 
@@ -131,5 +179,9 @@ class Parser {
         return result;
     }
 
-    Token parse() {return expr();}
+    Token parse() {
+        final Token<String> program = program();
+        if (currentToken.getType() != TokenType.EOF) { throw new AssertionError("语句不完整"); }
+        return program;
+    }
 }

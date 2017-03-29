@@ -28,7 +28,7 @@ class Lexer {
 
     public static void main(String[] args) {
         Lexer lexer = new Lexer(
-            ";BEGIN     BEGIN         number = 2;         a = number;         b = 10 * a + 10 * number / 4;         c = a - - b     END;     x = 11; END.");
+            "3;BEGIN  BEGIN  number = 2; a = number; b = 10 * a + 10 * number / 4;  c = a--b END;x = 11;END.");
         while (lexer.position < lexer.input.length()) { System.out.println(lexer.getNextToken()); }
     }
 
@@ -86,10 +86,8 @@ class Lexer {
     private int getNextInteger() {
         StringBuilder pending = new StringBuilder(); // 已经遇到的数字字符
         while (position < input.length()) {
-            if (Character.isDigit(input.charAt(position))) {
-                pending.append(input.charAt(position));
-                advance();
-            }
+            pending.append(input.charAt(position));
+            if (Character.isDigit(peek())) { advance(); }
             else { break; }
         }
         return Integer.parseInt(pending.toString());
@@ -97,7 +95,7 @@ class Lexer {
 
     private Token<?> checkKeyword(String name) {
         if (REVERSED_KEYWORDS.containsKey(name)) { return REVERSED_KEYWORDS.get(name);}
-        return new Variable(TokenType.VARIABLE, name);
+        return new Variable(name);
     }
 
     /**
@@ -108,10 +106,8 @@ class Lexer {
     private String getNextName() {
         StringBuilder pending = new StringBuilder();
         while (position < input.length()) { // 调用点保证了第一个字符仅可能是字母
-            if (Character.isLetterOrDigit(input.charAt(position))) {
-                pending.append(input.charAt(position));
-                advance();
-            }
+            pending.append(input.charAt(position));
+            if (Character.isLetterOrDigit(peek())) { advance(); }
             else { break; }
         }
         return pending.toString();

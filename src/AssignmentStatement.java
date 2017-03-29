@@ -15,4 +15,9 @@ public class AssignmentStatement extends BaseStatement {
     public Token<?> getExpr() {
         return expr;
     }
+
+    @Override
+    public String toString() {
+        return variableName + " = " + expr;
+    }
 }
