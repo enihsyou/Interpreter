@@ -1,18 +1,18 @@
 public class BinaryOperator extends BaseOperator {
-    private final Token<?> left;
-    private final Token<?> right;
+    private final Token left;
+    private final Token right;
 
-    BinaryOperator(final Token<?> left, final Token<?> operator, final Token<?> right) {
-        super(operator.getType());
+    BinaryOperator(final Token left, final TokenType operator, final Token right) {
+        super(operator);
         this.left = left;
         this.right = right;
     }
 
-    Token<?> getLeft() {
+    Token getLeft() {
         return left;
     }
 
-    Token<?> getRight() {
+    Token getRight() {
         return right;
     }
 

@@ -1,14 +1,14 @@
 public class AssignmentStatement extends BaseStatement {
-    private Variable variableName;
+    private VariableName variableName;
     private Token<?> expr;
 
-    public AssignmentStatement(final Variable variableName, final Token<?> expr) {
+    public AssignmentStatement(final VariableName variableName, final Token<?> expr) {
         super(TokenType.ASSIGNMENT);
         this.variableName = variableName;
         this.expr = expr;
     }
 
-    public Variable getVariableName() {
+    public VariableName getVariableName() {
         return variableName;
     }
 

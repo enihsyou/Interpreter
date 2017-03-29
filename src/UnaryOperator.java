@@ -1,17 +1,17 @@
 public class UnaryOperator extends BaseOperator {
-    private final Token<?> body;
+    private final Token object;
 
-    public UnaryOperator(final Token<?> operator, final Token<?> token) {
-        super(operator.getType());
-        this.body = token;
+    public UnaryOperator(final TokenType operatorType, final Token token) {
+        super(operatorType);
+        object = token;
     }
 
-    public Token<?> getBody() {
-        return body;
+    public Token getObject() {
+        return object;
     }
 
     @Override
     public String toString() {
-        return "{" + getType() + " " + body + "}";
+        return "{" + getType() + " " + object + "}";
     }
 }

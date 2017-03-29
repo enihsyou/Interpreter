@@ -88,14 +88,14 @@ class Parser {
     }
 
     private AssignmentStatement assignmentStatement() {
-        final Variable variable = variable();
+        final VariableName variable = variable();
         eat(TokenType.ASSIGN);
         final Token right = expr();
         return new AssignmentStatement(variable, right);
     }
 
-    private Variable variable() {
-        Variable node = new Variable((String) currentToken.getValue());
+    private VariableName variable() {
+        VariableName node = new VariableName((String) currentToken.getValue());
         eat(TokenType.VARIABLE);
         return node;
     }
@@ -114,10 +114,10 @@ class Parser {
                 return token;
             case PLUS:
                 eat(TokenType.PLUS);
-                return new UnaryOperator(token, factor());
+                return new UnaryOperator(TokenType.PLUS, factor());
             case MINUS:
                 eat(TokenType.MINUS);
-                return new UnaryOperator(token, factor());
+                return new UnaryOperator(TokenType.MINUS, factor());
             case LPAREN:
                 eat(TokenType.LPAREN);
                 Token result = expr();
@@ -150,7 +150,7 @@ class Parser {
                     eat(TokenType.POWER);
                     break;
             }
-            result = new BinaryOperator(result, token, factor());
+            result = new BinaryOperator(result, token.getType(), factor());
         }
         return result;
     }
@@ -174,7 +174,7 @@ class Parser {
                     eat(TokenType.MINUS);
                     break;
             }
-            result = new BinaryOperator(result, token, term());
+            result = new BinaryOperator(result, token.getType(), term());
         }
         return result;
     }

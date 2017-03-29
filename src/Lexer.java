@@ -43,7 +43,7 @@ class Lexer {
         while (advance()) {
             final char c = input.charAt(position);
             if (Character.isWhitespace(c)) { skipWhiteSpace(); } // 跳过当前空白字符
-            else if (Character.isDigit(c)) { return new IntegerToken(TokenType.INTEGER, getNextInteger()); }
+            else if (Character.isDigit(c)) { return new IntegerToken(getNextInteger()); }
             else if (Character.isAlphabetic(c)) { return checkKeyword(getNextName()); }
             else if ('=' == c) { return new ControlToken(TokenType.ASSIGN); }
             else if (';' == c) { return new ControlToken(TokenType.SEMICOLON); }
@@ -95,7 +95,7 @@ class Lexer {
 
     private Token<?> checkKeyword(String name) {
         if (REVERSED_KEYWORDS.containsKey(name)) { return REVERSED_KEYWORDS.get(name);}
-        return new Variable(name);
+        return new VariableName(name);
     }
 
     /**
