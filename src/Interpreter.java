@@ -1,6 +1,5 @@
 import org.jetbrains.annotations.NotNull;
 
-import java.math.BigInteger;
 import java.util.Scanner;
 
 /**
@@ -28,37 +27,37 @@ public class Interpreter implements NodeVisitor {
         return inputText;
     }
 
-    public Token evaluate() {
+    public Token<?> evaluate() {
         return visit(mParser.parse());
     }
 
     @Override
-    public Token visitUnary(final UnaryOperator node) {
+    public Token<?> visitUnary(final UnaryOperator node) {
         switch (node.getType()) {
             case PLUS:
                 return visit(node.getBody());
-            case MINUS:
-                return visit(node.getBody()).negate();
+            // case MINUS:
+            //     return new IntegerToken(TokenType.INTEGER, visit(node.getBody()).getValue());
             default:
                 throw new AssertionError("node = [" + node + "]" + "不应该发生");
         }
     }
 
     @Override
-    public Token visitBinary(final BinaryOperator node) {
+    public Token<?> visitBinary(final BinaryOperator node) {
         switch (node.getType()) {
-            case PLUS:
-                return new Token(TokenType.INTEGER, visit(node.getLeft()).getValue() + visit(node.getRight()).getValue());
-            case MINUS:
-                return new Token(TokenType.INTEGER, visit(node.getLeft()).getValue() - visit(node.getRight()).getValue());
-            case TIMES:
-                return new Token(TokenType.INTEGER, visit(node.getLeft()).getValue() * visit(node.getRight()).getValue());
-            case DIVIDE:
-                return new Token(TokenType.INTEGER, visit(node.getLeft()).getValue() / visit(node.getRight()).getValue());
-            case POWER:
-                return new Token(TokenType.INTEGER, BigInteger.valueOf(visit(node.getLeft()).getValue())
-                    .pow(visit(node.getRight()).getValue())
-                    .intValue());
+            // case PLUS:
+            //     return new Token(TokenType.INTEGER, visit(node.getLeft()).getValue() + visit(node.getRight()).getValue());
+            // case MINUS:
+            //     return new Token(TokenType.INTEGER, visit(node.getLeft()).getValue() - visit(node.getRight()).getValue());
+            // case TIMES:
+            //     return new Token(TokenType.INTEGER, visit(node.getLeft()).getValue() * visit(node.getRight()).getValue());
+            // case DIVIDE:
+            //     return new Token(TokenType.INTEGER, visit(node.getLeft()).getValue() / visit(node.getRight()).getValue());
+            // case POWER:
+            //     return new Token(TokenType.INTEGER, BigInteger.valueOf(visit(node.getLeft()).getValue())
+            //         .pow(visit(node.getRight()).getValue())
+            //         .intValue());
             default:
                 throw new AssertionError("node = [" + node + "]" + "不应该发生");
         }

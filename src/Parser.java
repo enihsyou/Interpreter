@@ -1,12 +1,31 @@
 /**
- * 解析由Lexer语法分析器传递过来的Token流，通过状态机
+ * 解析由Lexer语法分析器传递过来的Token流
+ * program : compound_statement DOT
+ *
+ * compound_statement : BEGIN statement_list END
+ *
+ * statement_list : statement | statement SEMI statement_list
+ *
+ * statement : compound_statement | assignment_statement | empty
+ *
+ * assignment_statement : variable ASSIGN expr
+ *
+ * expr: term ((PLUS | MINUS) term)*
+ *
+ * term: factor ((MUL | DIV) factor)*
+ *
+ * factor : PLUS factor | MINUS factor | INTEGER | LPAREN expr RPAREN | variable
+ *
+ * empty :
+ *
+ * variable: name
  */
-public class Parser {
-    private final Lexer mLexer;
+class Parser {
+    private final Lexer lexer;
     private Token currentToken;
 
-    public Parser(final Lexer lexer) {
-        mLexer = lexer;
+    Parser(final Lexer lexer) {
+        this.lexer = lexer;
         currentToken = lexer.getNextToken(); // 初始化，指向第一个Token
     }
 
@@ -16,9 +35,24 @@ public class Parser {
      * @param type 期望的Token类型
      */
     private void eat(final TokenType type) {
-        if (currentToken.getType() == type) { currentToken = mLexer.getNextToken(); }
+        if (currentToken.getType() == type) { currentToken = lexer.getNextToken(); }
         else { throw new AssertionError(type + "类型不符合对应" + type + "的要求"); }
     }
+
+    private Token program() {return null;}
+
+    private Token compundStatement() {return null;}
+
+    private Token statementStatement() {return null;}
+
+    private Token statement() {return null;}
+
+    private Token assignmentStatement() {return null;}
+
+    private Token variable() {return null;}
+
+    private Token empty() {return null;}
+
 
     /**
      * 数学式子里的操作数，操作因子
